@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  background: linear-gradient(to bottom left, #d1c4e9, #b2dfdb, #bbdefb);
+  min-height: 100vh;
+  background-size: cover;
+}
