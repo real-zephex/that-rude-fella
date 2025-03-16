@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ImageToOCR Utility
+
+Welcome to the ImageToOCR Utility project. This project is built with Next.js and TypeScript and leverages the power of the Google Generative AI API to extract text from images. The utility provides a simple interface where users can upload an image and receive the extracted text.
+
+## Features
+
+- **OCR Extraction:** Uses a Google Generative AI model ("gemini-1.5-flash") to accurately extract text from images.
+- **Simple UI:** A clean and responsive interface built with Tailwind CSS and daisyUI.
+- **Next.js Framework:** Optimized for server-side rendering and a great development experience.
+- **Modern Tools:** Utilizes TypeScript, ESLint for code quality, and Next.js' latest features.
+
+## Project Structure
+
+- **src/app:** Contains the main application components, including layout, global styles, and page setup.
+- **src/app/ui:** Houses the UI components such as the Navbar and ImageInput for file uploads.
+- **src/gemini:** Contains server-side logic to interact with the Google Generative AI API for OCR.
+- **Configuration Files:** Includes configuration files for ESLint, TypeScript, Next.js, and PostCSS.
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies:**
+  Run `npm install` or `yarn` in the project directory.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Setup Environment Variables:**
+  Create a `.env.local` file at the root of the project and set your API key:
+  ```
+  KEY=your_google_api_key
+  ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Run the Development Server:**
+  Start the Next.js dev server with:
+  ```
+  npm run dev
+  ```
+  or
+  ```
+  yarn dev
+  ```
+  The application will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Build and Start:**
+  To create a production build, run:
+  ```
+  npm run build
+  npm run start
+  ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Usage
 
-## Learn More
+- Navigate to the main page.
+- Upload an image using the provided file input.
+- The OCR utility processes the image and displays the extracted text on the screen.
 
-To learn more about Next.js, take a look at the following resources:
+## Technologies Used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js & React:** Frontend framework and component library.
+- **TypeScript:** For type-safe coding.
+- **Tailwind CSS & daisyUI:** Tailor-made styling and component library.
+- **Google Generative AI API:** For OCR functionality.
+- **ESLint:** Ensures code quality and consistency.
