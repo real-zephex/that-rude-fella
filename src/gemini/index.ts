@@ -20,20 +20,25 @@ const generationConfig = {
 };
 
 export async function analyzeImage(imageData: Uint8Array, mimeType: string) {
-  const chatSession = model.startChat({
-    generationConfig,
-    history: [],
-  });
+  try {
+    const chatSession = model.startChat({
+      generationConfig,
+      history: [],
+    });
 
-  const result = await chatSession.sendMessage([
-    {
-      inlineData: {
-        mimeType: mimeType,
-        data: Buffer.from(imageData).toString("base64"),
+    const result = await chatSession.sendMessage([
+      {
+        inlineData: {
+          mimeType: mimeType,
+          data: Buffer.from(imageData).toString("base64"),
+        },
       },
-    },
-  ]);
+    ]);
 
-  console.log(result.response.text());
-  return result.response.text();
+    console.log(result.response.text());
+    return result.response.text();
+  } catch (error) {
+    console.error(error);
+    return "Error processing image";
+  }
 }

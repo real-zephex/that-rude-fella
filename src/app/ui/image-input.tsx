@@ -2,18 +2,18 @@
 
 import { analyzeImage } from "@/gemini";
 import Image from "next/image";
-import { useState } from "react";
+import { JSX, useState } from "react";
 
 const ImageInput = () => {
   const [fileName, setFileName] = useState("No file chosen");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<string | JSX.Element>("");
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files) {
-      setText("Loading...");
+      setText(<span className="loading loading-bars loading-lg"></span>);
       const file = event.target.files[0];
       setFileName(file ? file.name : "No file chosen");
       if (file) {
