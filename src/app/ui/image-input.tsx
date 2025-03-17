@@ -29,7 +29,7 @@ const ImageInput = () => {
     e.preventDefault();
 
     const items = e.clipboardData!.items;
-    for (let item of items) {
+    for (const item of items) {
       if (item.type.startsWith("image/")) {
         const file = item.getAsFile();
         if (file) {
