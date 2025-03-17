@@ -2,12 +2,58 @@
 
 import { analyzeImage } from "@/gemini";
 import Image from "next/image";
-import { JSX, useState } from "react";
+import { JSX, useState, useRef, useEffect } from "react";
 
 const ImageInput = () => {
   const [fileName, setFileName] = useState("No file chosen");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [text, setText] = useState<string | JSX.Element>("");
+  const dropRef = useRef(null);
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log("Drop detected.");
+    e.preventDefault();
+    if (e.dataTransfer.files) {
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith("image/")) {
+        setText(<span className="loading loading-bars loading-lg"></span>);
+        setImagePreview(URL.createObjectURL(file));
+        setFileName(file.name);
+        handleResponse(file);
+      }
+    }
+  };
+
+  const handlePaste = (e: ClipboardEvent) => {
+    console.log("Paste detected.");
+    e.preventDefault();
+
+    const items = e.clipboardData!.items;
+    for (let item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        if (file) {
+          setText(<span className="loading loading-bars loading-lg"></span>);
+          setImagePreview(URL.createObjectURL(file));
+          setFileName(file.name);
+          handleResponse(file);
+          break;
+        }
+      }
+    }
+  };
+
+  const handleResponse = async (file: File) => {
+    const buffer = await file.arrayBuffer();
+    const imageData = new Uint8Array(buffer);
+
+    try {
+      const extractedText = await analyzeImage(imageData, file.type);
+      setText(extractedText);
+    } catch (error) {
+      console.error("Error analyzing image:", error);
+    }
+  };
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -21,24 +67,27 @@ const ImageInput = () => {
 
         console.log("Trying to perform OCR on the image...");
         // Convert file to Uint8Array
-        const buffer = await file.arrayBuffer();
-        const imageData = new Uint8Array(buffer);
-
-        try {
-          const extractedText = await analyzeImage(imageData, file.type);
-          setText(extractedText);
-          // Handle the extracted text here
-        } catch (error) {
-          console.error("Error analyzing image:", error);
-        }
+        handleResponse(file);
       } else {
         setImagePreview(null);
       }
     }
   };
 
+  useEffect(() => {
+    document.addEventListener("paste", handlePaste);
+    return () => {
+      document.removeEventListener("paste", handlePaste);
+    };
+  }, []);
+
   return (
-    <div className="container mx-auto grid lg:grid-cols-2 grid-cols-1 gap-4 p-2 lg:p-0">
+    <div
+      className="container mx-auto grid lg:grid-cols-2 grid-cols-1 gap-4 p-2 lg:p-0"
+      onDrop={handleDrop}
+      onDragOver={(e) => e.preventDefault()}
+      ref={dropRef}
+    >
       <div className="border-2 border-gray-400 rounded-3xl flex items-center justify-center flex-col">
         <p className="text-black m-2">
           Upload an image to extract the text and display it here.
