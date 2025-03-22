@@ -32,6 +32,7 @@ export async function analyzeImage(imageData: Uint8Array, mimeType: string) {
           mimeType: mimeType,
           data: Buffer.from(imageData).toString("base64"),
         },
+        
       },
     ]);
 
