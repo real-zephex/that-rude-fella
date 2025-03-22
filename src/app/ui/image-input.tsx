@@ -3,6 +3,7 @@
 import { analyzeImage } from "@/gemini";
 import Image from "next/image";
 import { JSX, useState, useRef, useEffect } from "react";
+import { FaPaste } from "react-icons/fa";
 
 const ImageInput = () => {
   const [fileName, setFileName] = useState("No file chosen");
@@ -64,9 +65,7 @@ const ImageInput = () => {
       setFileName(file ? file.name : "No file chosen");
       if (file) {
         setImagePreview(URL.createObjectURL(file));
-
         console.log("Trying to perform OCR on the image...");
-        // Convert file to Uint8Array
         handleResponse(file);
       } else {
         setImagePreview(null);
@@ -83,16 +82,16 @@ const ImageInput = () => {
 
   return (
     <div
-      className="container mx-auto grid lg:grid-cols-2 grid-cols-1 gap-4 p-2 lg:p-0"
+      className="max-w-4xl mx-auto p-4 bg-white shadow-xl rounded-xl grid lg:grid-cols-2 grid-cols-1 gap-6 transition-all duration-300"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
       ref={dropRef}
     >
-      <div className="border-2 border-gray-400 rounded-3xl flex items-center justify-center flex-col">
-        <p className="text-black m-2">
+      <div className="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-xl hover:shadow-lg transition-shadow duration-300">
+        <p className="text-gray-700 mb-4">
           Upload an image to extract the text and display it here.
         </p>
-        <form className="p-2">
+        <form className="w-full">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="file"
@@ -101,12 +100,9 @@ const ImageInput = () => {
               id="fileInput"
               onChange={handleFileChange}
             />
-            <label
-              htmlFor="fileInput"
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition active:scale-95 cursor-pointer"
-            >
+            <span className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition active:scale-95">
               Upload Image
-            </label>
+            </span>
             <span className="text-gray-500 text-sm">
               {fileName.length < 25
                 ? fileName
@@ -118,7 +114,7 @@ const ImageInput = () => {
               <Image
                 src={imagePreview}
                 alt="Selected preview"
-                className="w-52 lg:w-72 h-auto rounded-lg"
+                className="w-52 lg:w-72 rounded-lg shadow-md"
                 height={200}
                 width={200}
               />
@@ -126,8 +122,14 @@ const ImageInput = () => {
           )}
         </form>
       </div>
-      <div className="border-2 border-gray-400 rounded-3xl flex items-center justify-center flex-col p-3 ">
-        <p className="text-black">{text}</p>
+      <div className="flex flex-col items-center justify-center p-6 border border-gray-200 rounded-xl hover:shadow-lg transition-shadow duration-300 relative">
+        <p className="text-gray-800 text-center break-words">{text}</p>
+        <FaPaste
+          color="black"
+          className="absolute bottom-0 right-0 m-4 hover:bg-gray-500 transition-colors"
+          onClick={() => navigator.clipboard.writeText(text.toString())}
+          size={24}
+        />
       </div>
     </div>
   );
