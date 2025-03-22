@@ -8,7 +8,7 @@ const genAI = new GoogleGenerativeAI(key!);
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-flash",
   systemInstruction:
-    "You are an OCR utility. Your sole task is to extract and return the text from the provided image accurately. Do not generate any additional content, greetings, explanations, or formatting beyond the extracted text. If nothing detected, return no text found",
+    "You are an OCR utility. Your sole task is to extract text from the provided image accurately and correct any spelling errors. Return only the extracted and spell-checked text without any additional content, greetings, explanations, or formatting. If no text is detected, return 'no text found'",
 });
 
 const generationConfig = {
