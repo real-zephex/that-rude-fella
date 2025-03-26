@@ -2,7 +2,7 @@
 
 import { analyzeImage } from "@/gemini";
 import Image from "next/image";
-import { JSX, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaPaste } from "react-icons/fa";
 
 const ImageInput = () => {
