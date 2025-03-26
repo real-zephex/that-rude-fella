@@ -3,8 +3,8 @@ import ImageInput from "./ui/image-input";
 
 export default function Home() {
   return (
-    <main className="">
-      <div className="flex flex-row items-center justify-between p-4  lg:p-10">
+    <main>
+      <div className="flex flex-row items-center justify-between p-4 lg:p-10">
         <h2
           className={`font-semibold text-2xl text-black underline underline-offset-8  ${poppins.className}`}
         >
