@@ -130,6 +130,7 @@ const ImageInput = () => {
           className="text-gray-800 break-words w-full h-full border-0 active:border-0"
           defaultValue={text.toString()}
           readOnly
+          rows={8}
         ></textarea>
         <button
           className="absolute bottom-0 right-0 p-2 transition-colors rounded-tl-xl bg-neutral-200 hover:bg-neutral-400/75 group"
