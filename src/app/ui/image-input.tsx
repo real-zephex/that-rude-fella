@@ -25,7 +25,6 @@ const ImageInput = () => {
         }
         setText("Loading...");
         setImagePreview(URL.createObjectURL(file));
-        setFileName(file.name);
         handleResponse(file);
       }
     }
@@ -45,7 +44,6 @@ const ImageInput = () => {
           }
           setText("Loading...");
           setImagePreview(URL.createObjectURL(file));
-          setFileName(file.name);
           handleResponse(file);
           break;
         }
@@ -74,7 +72,6 @@ const ImageInput = () => {
       if (!checkFileSize(file)) {
         return;
       }
-      setFileName(file ? file.name : "No file chosen");
       if (file) {
         setImagePreview(URL.createObjectURL(file));
         console.log("Trying to perform OCR on the image...");
