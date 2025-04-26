@@ -9,7 +9,6 @@ import { MdAdsClick } from "react-icons/md";
 import { RiDragDropLine } from "react-icons/ri";
 
 const ImageInput = () => {
-  const [fileName, setFileName] = useState("No file chosen");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
