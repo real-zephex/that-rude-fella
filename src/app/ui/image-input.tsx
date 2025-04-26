@@ -4,10 +4,14 @@ import { analyzeImage } from "@/gemini";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { FaPaste } from "react-icons/fa";
+import { FaRegPaste } from "react-icons/fa6";
+import { MdAdsClick } from "react-icons/md";
+import { RiDragDropLine } from "react-icons/ri";
 
 const ImageInput = () => {
   const [fileName, setFileName] = useState("No file chosen");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
   const dropRef = useRef(null);
 
@@ -17,6 +21,9 @@ const ImageInput = () => {
     if (e.dataTransfer.files) {
       const file = e.dataTransfer.files[0];
       if (file && file.type.startsWith("image/")) {
+        if (!checkFileSize(file)) {
+          return;
+        }
         setText("Loading...");
         setImagePreview(URL.createObjectURL(file));
         setFileName(file.name);
@@ -34,6 +41,9 @@ const ImageInput = () => {
       if (item.type.startsWith("image/")) {
         const file = item.getAsFile();
         if (file) {
+          if (!checkFileSize(file)) {
+            return;
+          }
           setText("Loading...");
           setImagePreview(URL.createObjectURL(file));
           setFileName(file.name);
@@ -47,7 +57,6 @@ const ImageInput = () => {
   const handleResponse = async (file: File) => {
     const buffer = await file.arrayBuffer();
     const imageData = new Uint8Array(buffer);
-
     try {
       const extractedText = await analyzeImage(imageData, file.type);
       setText(extractedText);
@@ -61,7 +70,11 @@ const ImageInput = () => {
   ) => {
     if (event.target.files) {
       setText("Loading...");
+
       const file = event.target.files[0];
+      if (!checkFileSize(file)) {
+        return;
+      }
       setFileName(file ? file.name : "No file chosen");
       if (file) {
         setImagePreview(URL.createObjectURL(file));
@@ -72,6 +85,14 @@ const ImageInput = () => {
       }
     }
   };
+
+  function checkFileSize(file: File) {
+    if (file.size > 10 * 1024 * 1024) {
+      setText("File too large. Please upload an image smaller than 10MB.");
+      return false;
+    }
+    return true;
+  }
 
   useEffect(() => {
     document.addEventListener("paste", handlePaste);
@@ -91,11 +112,11 @@ const ImageInput = () => {
       ref={dropRef}
     >
       <div className={boxCss}>
-        <p className="text-gray-700 mb-4">
-          Upload an image to extract the text and display it here.
-        </p>
-        <form className="w-full">
-          <label className="flex items-center gap-3 cursor-pointer bg-gray-300 rounded-xl">
+        <form className="w-full h-full border-2 border-dotted border-gray-300 rounded-xl p-6 hover:border-gray-400 transition-all duration-200 flex flex-col gap-4 hover:shadow-lg">
+          <label
+            htmlFor="fileInput"
+            className="flex flex-col items-center justify-center gap-4 cursor-pointer text-gray-600 text-center flex-grow"
+          >
             <input
               type="file"
               accept="image/*"
@@ -103,21 +124,42 @@ const ImageInput = () => {
               id="fileInput"
               onChange={handleFileChange}
             />
-            <span className="bg-blue-600 text-white px-5 py-2 rounded-l-lg hover:bg-blue-700 transition active:scale-95">
-              Upload Image
-            </span>
-            <span className="text-gray-500 text-sm">
-              {fileName.length < 25
-                ? fileName
-                : fileName.substring(0, 20) + "..."}
-            </span>
+
+            <div className="flex flex-row items-center gap-2 bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200">
+              <MdAdsClick className="text-xl" />
+              <p className="text-lg font-semibold">Click to Upload Image</p>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 text-sm text-gray-500">
+              <p>or</p>
+              <div className="flex flex-row items-center gap-1">
+                <RiDragDropLine className="text-base" />
+                <p>Drag and drop your image here</p>
+              </div>
+              <div className="flex flex-row items-center gap-1">
+                <FaRegPaste className="text-base" />
+                <p>Paste image from clipboard</p>{" "}
+              </div>
+            </div>
           </label>
-          {imagePreview && (
-            <div className="mt-4">
+
+          <label className="flex flex-row items-center gap-2 text-gray-700 select-none">
+            <input
+              type="checkbox"
+              checked={showPreview}
+              name="imagePreview"
+              onChange={() => setShowPreview((prev) => !prev)}
+              className="size-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <p>Show Preview</p>
+          </label>
+
+          {showPreview && imagePreview && (
+            <div className="mt-2">
               <Image
                 src={imagePreview}
                 alt="Selected preview"
-                className="w-52 lg:w-72 rounded-lg shadow-md"
+                className="w-full max-w-sm h-auto rounded-lg shadow-md object-cover mx-auto"
                 height={200}
                 width={200}
               />

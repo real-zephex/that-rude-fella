@@ -15,7 +15,9 @@ export default function Home() {
         </p>
       </div>
 
-      <ImageInput />
+      <div className="p-2">
+        <ImageInput />
+      </div>
     </main>
   );
 }
